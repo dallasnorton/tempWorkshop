@@ -18,33 +18,40 @@
 
  d3.json("https://spreadsheets.google.com/feeds/list/1xfZDjYWzrNTtHt0r6XWyon0B44LRBNPH7TgEwZU0Vbo/obkfnnu/public/basic?alt=json", function(error, json) {
    if (error) return console.warn(error);
-   buildData(json.feed.entry);
+   candidateData = buildData(json.feed.entry);
 
+   // TODO???
    var candidateList = d3.map(candidateData, function(d) {
      return d.candidate;
    }).keys();
 
+   // TODO???
    var x = d3.time.scale()
      .range([0, width])
      .domain(d3.extent(candidateData, function(d) {
        return parseDate(d.date);
      }));
 
+   // TODO???
    var y = d3.scale.linear()
      .range([height, 0])
      .domain([0, 250]);
 
+   // TODO???
    var color = d3.scale.category20()
      .domain(candidateList);
 
+   // Optional
    var xAxis = d3.svg.axis()
      .scale(x)
      .orient("bottom");
 
+   // Optional
    var yAxis = d3.svg.axis()
      .scale(y)
      .orient("left");
 
+   // TODO
    var area = d3.svg.area()
      .x(function(d) {
        return x(d.date);
@@ -56,11 +63,13 @@
        return y(d.y0 + d.y);
      });
 
+   // TODO
    var stack = d3.layout.stack()
      .values(function(d) {
        return d.values;
      });
 
+   // TODO
    var candidates = stack(candidateList.map(function(candidateName) {
      return {
        name: candidateName,
@@ -73,13 +82,13 @@
      };
    }));
 
-   console.log(candidates);
-
+   // TODO
    var candidate = svg.selectAll(".candidate")
      .data(candidates)
      .enter().append("g")
      .attr("class", "candidate");
 
+   // TODO
    candidate.append("path")
      .attr("class", "area")
      .attr("d", function(d) {
@@ -89,6 +98,7 @@
        return color(d.name);
      });
 
+   // Optional
    candidate.append("text")
      .datum(function(d) {
        return {
@@ -105,11 +115,13 @@
        return d.name;
      });
 
+   // Optional
    svg.append("g")
      .attr("class", "x axis")
      .attr("transform", "translate(0," + height + ")")
      .call(xAxis);
 
+   // Optional
    svg.append("g")
      .attr("class", "y axis")
      .call(yAxis);
@@ -133,4 +145,6 @@
 
      candidateData.push(tempObj);
    }
+
+   return candidateData;
  }
