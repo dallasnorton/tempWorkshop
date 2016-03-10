@@ -121,6 +121,17 @@
      .text(function(d) {
        return d.name;
      });
+
+   // Optional
+   svg.append("g")
+     .attr("class", "x axis")
+     .attr("transform", "translate(0," + height + ")")
+     .call(xAxis);
+
+   // Optional
+   svg.append("g")
+     .attr("class", "y axis")
+     .call(yAxis);
  }
 
  function buildData(inputData) {
