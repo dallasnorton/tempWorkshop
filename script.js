@@ -19,17 +19,21 @@
  d3.json("https://spreadsheets.google.com/feeds/list/1ldYMu_1u-C-2Cj9u9UOCDfgMEcza3GVhhcpZCkw9FY0/od6/public/basic?alt=json", function(error, json) {
    if (error) return console.warn(error);
    candidateData = buildData(json.feed.entry)
-    .filter(d => d.poll === 'IBD/TIPP');
+     .filter(d => d.poll === 'IBD/TIPP');
 
+   draw(candidateData);
+ });
+
+ function draw(data) {
    // TODO???
-   var candidateList = d3.map(candidateData, function(d) {
+   var candidateList = d3.map(data, function(d) {
      return d.candidate;
    }).keys();
 
    // TODO???
    var x = d3.time.scale()
      .range([0, width])
-     .domain(d3.extent(candidateData, function(d) {
+     .domain(d3.extent(data, function(d) {
        return parseDate(d.date);
      }));
 
@@ -74,9 +78,9 @@
    var candidates = stack(candidateList.map(function(candidateName) {
      return {
        name: candidateName,
-       values: candidateData.filter(function(data) {
+       values: data.filter(function(data) {
          return data.candidate === candidateName;
-        }).map(function(d) {
+       }).map(function(d) {
          return {
            date: parseDate(d.date),
            y: Number(d.popularity)
@@ -117,18 +121,7 @@
      .text(function(d) {
        return d.name;
      });
-
-   // Optional
-   svg.append("g")
-     .attr("class", "x axis")
-     .attr("transform", "translate(0," + height + ")")
-     .call(xAxis);
-
-   // Optional
-   svg.append("g")
-     .attr("class", "y axis")
-     .call(yAxis);
- });
+ }
 
  function buildData(inputData) {
    var tempObj = {};
