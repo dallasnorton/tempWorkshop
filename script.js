@@ -16,7 +16,7 @@
    .append("g")
    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
- d3.json("https://spreadsheets.google.com/feeds/list/1xfZDjYWzrNTtHt0r6XWyon0B44LRBNPH7TgEwZU0Vbo/obkfnnu/public/basic?alt=json", function(error, json) {
+ d3.json("https://spreadsheets.google.com/feeds/list/1ldYMu_1u-C-2Cj9u9UOCDfgMEcza3GVhhcpZCkw9FY0/od6/public/basic?alt=json", function(error, json) {
    if (error) return console.warn(error);
    candidateData = buildData(json.feed.entry)
     .filter(d => d.poll === 'IBD/TIPP');
