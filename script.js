@@ -18,7 +18,8 @@
 
  d3.json("https://spreadsheets.google.com/feeds/list/1xfZDjYWzrNTtHt0r6XWyon0B44LRBNPH7TgEwZU0Vbo/obkfnnu/public/basic?alt=json", function(error, json) {
    if (error) return console.warn(error);
-   candidateData = buildData(json.feed.entry);
+   candidateData = buildData(json.feed.entry)
+    .filter(d => d.poll === 'IBD/TIPP');
 
    // TODO???
    var candidateList = d3.map(candidateData, function(d) {
@@ -35,7 +36,7 @@
    // TODO???
    var y = d3.scale.linear()
      .range([height, 0])
-     .domain([0, 250]);
+     .domain([0, 100]);
 
    // TODO???
    var color = d3.scale.category20()
@@ -73,7 +74,9 @@
    var candidates = stack(candidateList.map(function(candidateName) {
      return {
        name: candidateName,
-       values: candidateData.map(function(d) {
+       values: candidateData.filter(function(data) {
+         return data.candidate === candidateName;
+        }).map(function(d) {
          return {
            date: parseDate(d.date),
            y: Number(d.popularity)
@@ -131,6 +134,7 @@
    var tempObj = {};
    var split1;
    var split2;
+   var results = [];
 
    for (var i = 0; i < inputData.length; i++) {
      tempObj = {};
@@ -143,8 +147,8 @@
      });
      tempObj.date = inputData[i].title.$t;
 
-     candidateData.push(tempObj);
+     results.push(tempObj);
    }
 
-   return candidateData;
+   return results;
  }
